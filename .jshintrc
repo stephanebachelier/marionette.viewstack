@@ -33,6 +33,8 @@
     "after": true,
     "beforeEach": true,
     "afterEach": true,
-    "ViewStack": true
+    "ViewStack": true,
+    "Backbone": true,
+    "Marionette": true
   }
 }
