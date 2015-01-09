@@ -11,10 +11,7 @@
     factory({{{globalDependencies}}});
   }
 }(this, function ({{dependencies}}) {
-
 {{indent}}'use strict';
 {{{code}}}
-{{#if objectToExport}}
-{{indent}}return {{{objectToExport}}};
-{{/if}}
+{{#if objectToExport}}{{indent}}return {{{objectToExport}}};{{/if}}
 }));
