@@ -1,0 +1,23 @@
+{
+  "name": "marionette.viewstack",
+  "version": "0.0.0",
+  "description": "A view stack implementation for Marionette",
+  "main": "dist/marionette.viewstack.js",
+  "author": {
+    "name": "Stéphane Bachelier",
+    "email": "stephane.bachelier@gmail.com"
+  },
+  "repository": {
+    "url": "https://github.com/stephanebachelier/marionette.viewstack.git",
+    "type": "git"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
