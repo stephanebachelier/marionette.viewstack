@@ -35,6 +35,10 @@
     "afterEach": true,
     "ViewStack": true,
     "Backbone": true,
-    "Marionette": true
+    "Marionette": true,
+    "Container": true,
+    "ViewCache": true,
+    "ViewFactory": true,
+    "_": true
   }
 }
