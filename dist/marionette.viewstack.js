@@ -1,4 +1,4 @@
-/*! marionette.viewstack - v0.2.2
+/*! marionette.viewstack - v0.3.0
  *  Release on: 2015-01-15
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
@@ -20,6 +20,7 @@
   var ViewController = function (options) {
     this.options = options || {};
     this._ensureElement();
+    this.stucked = []; // store stucked elements at the top
   };
 
   ViewController.prototype = {
@@ -44,6 +45,32 @@
       return new Region({el: regionEl});
     },
 
+    injectElement: function (region, options) {
+      var sticky = options && options.sticky;
+
+      if (!this.el.contains(region.el)) {
+        this.el.appendChild(region.el);
+      }
+      else {
+        var length = this.stucked.length;
+        if (length) {
+          var index = 0;
+          var attachedNode;
+          for (; !attachedNode && (index < length - 1); index += 1) {
+            attachedNode = this.stucked[index].parentNode;
+          }
+          this.el.insertBefore(region.el, attachedNode);
+        }
+        else {
+          this.el.appendChild(region.el);
+        }
+      }
+
+      if (sticky) {
+        this.stucked.push(region.el);
+      }
+    },
+
     show: function (view, options) {
       return this.showIn(null, view, options);
     },
@@ -51,9 +78,7 @@
     showIn: function (region, view, options) {
       region = region || this.buildRegion(options);
 
-      if (!this.el.contains(region.el)) {
-        this.el.appendChild(region.el);
-      }
+      this.injectElement(region, options);
 
       this.triggerMethod('before:view:show', region, view, options);
       region.show(view, options);
@@ -89,6 +114,12 @@
 
       region.empty();
 
+      // remove reference in stucked elements if it exists
+      var index = this.stucked.indexOf(region.el);
+      if (-1 !== index) {
+        this.stucked = this.stucked.splice(index, 1);
+      }
+
       if (destroy) {
         region.$el.remove();
         region.destroy();
@@ -109,12 +140,12 @@
       views = null;
     },
 
-    swap: function (region, options) { // jshint unused:false
+    swap: function (region, options) {
       if (!this.el.contains(region.el)) {
         return false;
       }
 
-      this.$el.children().last().after(region.$el.parent());
+      this.injectElement(region, options);
     },
 
     triggerMethod: Marionette.triggerMethod
@@ -182,7 +213,8 @@
     },
 
     swap: function (view, options) {
-      return this.viewController.swap(view, options);
+      var wrapper = this.container.get(view.cid);
+      return this.viewController.swap(wrapper, options);
     }
   };
 
