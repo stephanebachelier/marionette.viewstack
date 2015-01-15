@@ -1,21 +1,17 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
     define(["marionette",
-      "container"], factory);
+      "hashmapper"], factory);
   } else if (typeof exports === 'object') {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like enviroments that support module.exports,
-    // like Node.
     module.exports = factory(require("marionette"),
-      require("container"));
+      require("hashmapper"));
   } else {
     factory(Marionette,
-      container);
+      hashmapper);
   }
-}(this, function (Marionette, Container) {
+}(this, function (Marionette, Hashmapper) {
   'use strict';
-  /*! marionette.viewstack - v0.1.0
+  /*! marionette.viewstack - v0.2.0
    *  Release on: 2015-01-15
    *  Copyright (c) 2015 Stéphane Bachelier
    *  Licensed MIT */
@@ -131,7 +127,7 @@
 
 
   /* jshint strict:false */
-  /* global Container */
+  /* global Hashmapper */
   /* global ViewController */
   var ViewStack = function (options) {
     this.options = options || {};
@@ -147,7 +143,7 @@
     },
 
     getDefaultContainer: function () {
-      return new Container();
+      return new Hashmapper();
     },
 
     push: function (view, options) {
@@ -216,6 +212,7 @@
 
 
   /* jshint strict:false */
+  /* global Hashmapper */
   var ViewCache = function (options) {
     this.options = options || {};
     this.viewContainer = this.options.container || this.getDefaultContainer();
@@ -223,7 +220,7 @@
 
   ViewCache.prototype = {
     getDefaultContainer: function () {
-      return new Container();
+      return new Hashmapper();
     },
 
     push: function (name, view, options) {
