@@ -12,7 +12,9 @@
     "type": "git"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "hashmapper": "^0.2.0"
+  },
   "ignore": [
     "**/.*",
     "node_modules",
