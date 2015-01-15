@@ -1,4 +1,4 @@
-/*! marionette.viewstack - v0.3.0
+/*! marionette.viewstack - v0.3.1
  *  Release on: 2015-01-15
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
@@ -57,8 +57,9 @@
           var index = 0;
           var attachedNode;
           for (; !attachedNode && (index < length - 1); index += 1) {
-            attachedNode = this.stucked[index].parentNode;
+            attachedNode = this.stucked[index].parentNode ? this.stucked[index] : undefined;
           }
+          // passing undefined seems ok and is equivalent to appendChild
           this.el.insertBefore(region.el, attachedNode);
         }
         else {
