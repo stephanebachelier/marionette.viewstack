@@ -7,6 +7,6 @@ build:
   - jscs:lib
   - lintspaces:lib
   - preprocess
-  - concat
   - umd
+  - concat
   - uglify
