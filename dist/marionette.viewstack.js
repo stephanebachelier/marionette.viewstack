@@ -1,3 +1,7 @@
+/*! marionette.viewstack - v0.2.2
+ *  Release on: 2015-01-15
+ *  Copyright (c) 2015 Stéphane Bachelier
+ *  Licensed MIT */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(["marionette",
@@ -11,13 +15,8 @@
   }
 }(this, function (Marionette, Hashmapper) {
   'use strict';
-  /*! marionette.viewstack - v0.2.1
-   *  Release on: 2015-01-15
-   *  Copyright (c) 2015 Stéphane Bachelier
-   *  Licensed MIT */
   Marionette.viewStack = {};
 
-  /* jshint strict:false */
   var ViewController = function (options) {
     this.options = options || {};
     this._ensureElement();
@@ -126,9 +125,6 @@
   Marionette.viewStack.ViewController = ViewController;
 
 
-  /* jshint strict:false */
-  /* global Hashmapper */
-  /* global ViewController */
   var ViewStack = function (options) {
     this.options = options || {};
 
@@ -197,7 +193,6 @@
   Marionette.viewStack.ViewStack = ViewStack;
 
 
-  /* jshint strict:false */
   var ViewFactory = Object.create(null);
 
   ViewFactory = {
@@ -211,8 +206,6 @@
   Marionette.viewStack.ViewFactory = ViewFactory;
 
 
-  /* jshint strict:false */
-  /* global Hashmapper */
   var ViewCache = function (options) {
     this.options = options || {};
     this._hashmap = this.options.hashmap || this.getDefaultContainer();
@@ -248,7 +241,6 @@
   Marionette.viewStack.ViewCache = ViewCache;
 
 
-  /* jshint strict:false */
   var ViewStackFactory = function (views, options) { // jshint unused:false
     this._views = views;
     this.options = options || {};

@@ -1,6 +1,6 @@
 {
   "name": "marionette.viewstack",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A view stack implementation for Marionette",
   "main": "dist/marionette.viewstack.js",
   "author": {
