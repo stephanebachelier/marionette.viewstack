@@ -8,10 +8,10 @@ module.exports = function () {
       dest: 'dist/<%= pkg.name.replace(/.js$/, "") %>.js',
       objectToExport: 'Marionette.viewStack',
       deps: {
-        default: ['Marionette', 'Container'],
-        amd: ['marionette', 'container'],
-        cjs: ['marionette', 'container'],
-        global: ['Marionette', 'container']
+        default: ['Marionette', 'Hashmapper'],
+        amd: ['marionette', 'hashmapper'],
+        cjs: ['marionette', 'hashmapper'],
+        global: ['Marionette', 'hashmapper']
       }
     }
   };

@@ -36,7 +36,7 @@
     "ViewStack": true,
     "Backbone": true,
     "Marionette": true,
-    "Container": true,
+    "Hashmapper": true,
     "ViewCache": true,
     "ViewFactory": true,
     "_": true
