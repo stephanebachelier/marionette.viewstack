@@ -11,7 +11,7 @@
   }
 }(this, function (Marionette, Hashmapper) {
   'use strict';
-  /*! marionette.viewstack - v0.2.0
+  /*! marionette.viewstack - v0.2.1
    *  Release on: 2015-01-15
    *  Copyright (c) 2015 Stéphane Bachelier
    *  Licensed MIT */
@@ -215,7 +215,7 @@
   /* global Hashmapper */
   var ViewCache = function (options) {
     this.options = options || {};
-    this.viewContainer = this.options.container || this.getDefaultContainer();
+    this._hashmap = this.options.hashmap || this.getDefaultContainer();
   };
 
   ViewCache.prototype = {
@@ -231,15 +231,15 @@
         view.once('destroy', _.bind(destroyCallback, this), this);
       }
 
-      this.viewContainer.add(name, view);
+      this._hashmap.add(name, view);
     },
 
     get: function (name) {
-      return this.viewContainer.get(name);
+      return this._hashmap.get(name);
     },
 
     remove: function (name) {
-      return this.viewContainer.remove(name);
+      return this._hashmap.remove(name);
     }
   };
 
