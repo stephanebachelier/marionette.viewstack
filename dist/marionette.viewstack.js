@@ -1,5 +1,5 @@
-/*! marionette.viewstack - v0.4.1
- *  Release on: 2015-01-17
+/*! marionette.viewstack - v0.4.2
+ *  Release on: 2015-01-18
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
 (function (root, factory) {
@@ -383,10 +383,12 @@
       var promise = new Promise(function (resolve, reject) {
         if (!self._views[name]) {
           reject('No view registered with the name [' + name + ']');
+          return;
         }
 
         if (self._viewClasses && self._viewClasses[name]) {
           resolve(self.syncPush(name, options, viewStackOptions));
+          return;
         }
 
         self.load(self._views[name], function (ViewClass) {
