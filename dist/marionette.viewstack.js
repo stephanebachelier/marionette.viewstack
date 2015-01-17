@@ -1,4 +1,4 @@
-/*! marionette.viewstack - v0.4.0
+/*! marionette.viewstack - v0.4.1
  *  Release on: 2015-01-17
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
@@ -416,7 +416,7 @@
 
   ViewStackAmdFactory.extend = Marionette.extend;
 
-  Marionette.viewStack.ViewStackAsyncFactory = ViewStackAmdFactory;
+  Marionette.viewStack.ViewStackAmdFactory = ViewStackAmdFactory;
 
 
   return Marionette.viewStack;
