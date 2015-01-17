@@ -40,6 +40,7 @@
     "ViewCache": true,
     "ViewFactory": true,
     "ViewController": true,
+    "ViewStackFactory": true,
     "_": true
   }
 }
