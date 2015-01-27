@@ -1,4 +1,4 @@
-/*! marionette.viewstack - v0.4.4
+/*! marionette.viewstack - v0.4.5
  *  Release on: 2015-01-27
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
@@ -219,6 +219,16 @@
     swap: function (view, options) {
       var wrapper = this.container.get(view.cid);
       return this.viewController.swap(wrapper, options);
+    },
+
+    // sugar : proxy container length() to ease some logic
+    length: function () {
+      return this.container.length();
+    },
+
+    // sugar around container.length method
+    isEmpty: function () {
+      return 0 <= this.length();
     }
   };
 
