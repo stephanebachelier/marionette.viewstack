@@ -1,5 +1,5 @@
-/*! marionette.viewstack - v0.4.3
- *  Release on: 2015-01-19
+/*! marionette.viewstack - v0.4.4
+ *  Release on: 2015-01-27
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
 (function (root, factory) {
@@ -179,6 +179,9 @@
     },
 
     pushIn: function (region, view, options) {
+      view.once('destroy', function () {
+        this.container.remove(view.cid);
+      }, this);
       // delegate view injection into DOM to view controller
       this.container.add(view.cid, this.viewController.showIn(region, view, options));
 
