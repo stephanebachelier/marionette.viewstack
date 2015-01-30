@@ -1,5 +1,5 @@
-/*! marionette.viewstack - v0.4.5
- *  Release on: 2015-01-27
+/*! marionette.viewstack - v0.5.0
+ *  Release on: 2015-01-30
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
 (function (root, factory) {
@@ -229,6 +229,11 @@
     // sugar around container.length method
     isEmpty: function () {
       return 0 <= this.length();
+    },
+
+    // sugar api
+    contains: function (view) {
+      return undefined !== this.container.get(view.cid);
     }
   };
 
@@ -324,6 +329,25 @@
       return name;
     },
 
+    getView: function (factory, name, options) {
+      // retrieve a cache uid
+      var cacheUid = (factory.getCacheUid || this.getCacheUid)(name, options);
+      var view = this._cache.get(cacheUid);
+
+      if (view) {
+        return view;
+      }
+
+      // if view not in cache build and push on stack
+      view = factory.create(options);
+
+      // add view to cache with smart flag which means that view cache should listen to
+      // view destroy event to clean up its cache
+      this._cache.push(cacheUid, view, {smart: true});
+
+      return view;
+    },
+
     pop: function (view) {
       this._stack.pop(view);
     },
@@ -339,22 +363,12 @@
     push: function (name, options, viewStackOptions) {
       var factory = this.getViewFactory(name);
 
-      // retrieve a cache uid
-      var cacheUid = (factory.getCacheUid || this.getCacheUid)(name, options);
-      var view = this._cache.get(cacheUid);
+      var view = this.getView(factory, name, options);
 
-      // swap existing view
-      if (view) {
+      // swap view if already in view stack
+      if (this._stack.contains(view)) {
         this._stack.swap(view, viewStackOptions || {});
-        return view;
       }
-
-      // if view not in cache build and push on stack
-      view = factory.create(options);
-
-      // add view to cache with smart flag which means that view cache should listen to
-      // view destroy event to clean up its cache
-      this._cache.push(cacheUid, view, {smart: true});
 
       // enable override of the view stack options based on the view created
       var vsOptionsHandler;
@@ -402,6 +416,11 @@
       this._stack.pushIn(wrapper, view, vsOptions || {});
 
       return view;
+    },
+
+    render: function (name, options) {
+      var factory = this.getViewFactory(name);
+      return this.getView(factory, name, options);
     }
   };
 
@@ -425,18 +444,36 @@
     push: function (name, options, viewStackOptions) {
       var self = this;
 
-      var promise = new Promise(function (resolve, reject) {
+      return this.load(name).then(function (ViewClass) { // jshint unused:false
+        return self.syncPush(name, options, viewStackOptions);
+      });
+    },
+
+    renderSync: ViewStackFactory.prototype.render,
+
+    render: function (name, options) {
+      var self = this;
+
+      return this.load(name).then(function (ViewClass) { // jshint unused:false
+        return self.renderSync(name, options);
+      });
+    },
+
+    load: function (name) {
+      var self = this;
+
+      return new Promise(function (resolve, reject) {
         if (!self._views[name]) {
           reject('No view registered with the name [' + name + ']');
           return;
         }
 
         if (self._viewClasses && self._viewClasses[name]) {
-          resolve(self.syncPush(name, options, viewStackOptions));
+          resolve(self._viewClasses[name]);
           return;
         }
 
-        self.load(self._views[name], function (ViewClass) {
+        self._load(self._views[name], function (ViewClass) {
           if (!ViewClass) {
             reject('No view implementation found with the name [' + name + ']');
             return;
@@ -448,15 +485,12 @@
 
           self._viewClasses[name] = ViewClass;
 
-          // resolve is pass the result of the original push function
-          resolve(self.syncPush(name, options, viewStackOptions));
+          resolve(ViewClass);
         });
       });
-
-      return promise;
     },
 
-    load: function (dep, cb) {
+    _load: function (dep, cb) {
       require([dep], cb);
     }
   });
