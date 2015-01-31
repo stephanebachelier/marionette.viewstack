@@ -1,5 +1,5 @@
-/*! marionette.viewstack - v0.5.0
- *  Release on: 2015-01-30
+/*! marionette.viewstack - v0.5.1
+ *  Release on: 2015-01-31
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
 (function (root, factory) {
@@ -67,7 +67,7 @@
         }
       }
 
-      if (sticky) {
+      if (sticky && (-1 === this.stucked.indexOf(region.el))) {
         this.stucked.push(region.el);
       }
     },
@@ -97,15 +97,12 @@
         return;
       }
 
-      var viewId = region.currentView.cid;
       var result = this.triggerMethod('before:view:remove', region, region.currentView);
 
       // read result if any and stop process if value is false
       if (false === result) {
         return;
       }
-
-      this.triggerMethod('view:remove', region, region.currentView);
 
       // empty region and destroy region and its element
       var destroy = options && options.destroy;
@@ -122,11 +119,10 @@
       }
 
       if (destroy) {
-        region.$el.remove();
         region.destroy();
-
-        // inform about view removal
-        this.triggerMethod('view:removed', viewId);
+        region.$el.remove();
+        region.reset(); // clear region
+        region = null;
       }
     },
 
@@ -332,7 +328,11 @@
     getView: function (factory, name, options) {
       // retrieve a cache uid
       var cacheUid = (factory.getCacheUid || this.getCacheUid)(name, options);
-      var view = this._cache.get(cacheUid);
+      var view;
+
+      if (cacheUid) {
+        view = this._cache.get(cacheUid);
+      }
 
       if (view) {
         return view;
@@ -343,7 +343,9 @@
 
       // add view to cache with smart flag which means that view cache should listen to
       // view destroy event to clean up its cache
-      this._cache.push(cacheUid, view, {smart: true});
+      if (cacheUid) {
+        this._cache.push(cacheUid, view, {smart: true});
+      }
 
       return view;
     },
