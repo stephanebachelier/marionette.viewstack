@@ -1,4 +1,4 @@
-/*! marionette.viewstack - v0.5.2
+/*! marionette.viewstack - v0.5.3
  *  Release on: 2015-02-02
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
@@ -422,7 +422,21 @@
 
     render: function (name, options) {
       var factory = this.getViewFactory(name);
-      return this.getView(factory, name, options);
+      var view = this.getView(factory, name, options);
+      view.render();
+
+      return view;
+    },
+
+    renderIn: function (region, name, options) {
+      var factory = this.getViewFactory(name);
+      var view = this.getView(factory, name, options);
+
+      if (view) {
+        region.show(view);
+      }
+
+      return view;
     }
   };
 
@@ -463,11 +477,11 @@
 
     renderInSync: ViewStackFactory.prototype.renderIn,
 
-    renderIn: function (name, options) {
+    renderIn: function (region, name, options) {
       var self = this;
 
       return this.load(name).then(function (ViewClass) { // jshint unused:false
-        return self.renderInSync(name, options);
+        return self.renderInSync(region, name, options);
       });
     },
 
