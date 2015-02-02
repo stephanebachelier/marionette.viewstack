@@ -1,5 +1,5 @@
-/*! marionette.viewstack - v0.5.1
- *  Release on: 2015-01-31
+/*! marionette.viewstack - v0.5.2
+ *  Release on: 2015-02-02
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
 (function (root, factory) {
@@ -458,6 +458,16 @@
 
       return this.load(name).then(function (ViewClass) { // jshint unused:false
         return self.renderSync(name, options);
+      });
+    },
+
+    renderInSync: ViewStackFactory.prototype.renderIn,
+
+    renderIn: function (name, options) {
+      var self = this;
+
+      return this.load(name).then(function (ViewClass) { // jshint unused:false
+        return self.renderInSync(name, options);
       });
     },
 
