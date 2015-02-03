@@ -1,5 +1,5 @@
-/*! marionette.viewstack - v0.5.3
- *  Release on: 2015-02-02
+/*! marionette.viewstack - v0.5.4
+ *  Release on: 2015-02-03
  *  Copyright (c) 2015 Stéphane Bachelier
  *  Licensed MIT */
 (function (root, factory) {
@@ -84,6 +84,9 @@
       this.triggerMethod('before:view:show', region, view, options);
       region.show(view, options);
       this.triggerMethod('view:show', region, view, options);
+
+      region.el.dataset.cacheUid = view._infos.cacheUid;
+      region.el.dataset.name = view._infos.name;
 
       return region;
     },
@@ -340,6 +343,10 @@
 
       // if view not in cache build and push on stack
       view = factory.create(options);
+      view._infos = {
+        name: name,
+        cacheUid: cacheUid
+      };
 
       // add view to cache with smart flag which means that view cache should listen to
       // view destroy event to clean up its cache
@@ -370,6 +377,7 @@
       // swap view if already in view stack
       if (this._stack.contains(view)) {
         this._stack.swap(view, viewStackOptions || {});
+        return view;
       }
 
       // enable override of the view stack options based on the view created
@@ -460,7 +468,7 @@
     push: function (name, options, viewStackOptions) {
       var self = this;
 
-      return this.load(name).then(function (ViewClass) { // jshint unused:false
+      return this.load(name).then(function (Factory) { // jshint unused:false
         return self.syncPush(name, options, viewStackOptions);
       });
     },
@@ -470,7 +478,7 @@
     render: function (name, options) {
       var self = this;
 
-      return this.load(name).then(function (ViewClass) { // jshint unused:false
+      return this.load(name).then(function (Factory) { // jshint unused:false
         return self.renderSync(name, options);
       });
     },
@@ -480,7 +488,7 @@
     renderIn: function (region, name, options) {
       var self = this;
 
-      return this.load(name).then(function (ViewClass) { // jshint unused:false
+      return this.load(name).then(function (Factory) { // jshint unused:false
         return self.renderInSync(region, name, options);
       });
     },
@@ -499,8 +507,8 @@
           return;
         }
 
-        self._load(self._views[name], function (ViewClass) {
-          if (!ViewClass) {
+        self._load(self._views[name], function (Factory) {
+          if (!Factory) {
             reject('No view implementation found with the name [' + name + ']');
             return;
           }
@@ -509,9 +517,9 @@
             self._viewClasses = {};
           }
 
-          self._viewClasses[name] = ViewClass;
+          self._viewClasses[name] = Factory;
 
-          resolve(ViewClass);
+          resolve(Factory);
         });
       });
     },
