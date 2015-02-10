@@ -31,7 +31,7 @@
     "grunt-jscs": "^1.1.0",
     "grunt-lintspaces": "^0.5.1",
     "grunt-preprocess": "^4.1.0",
-    "grunt-umd": "^2.3.0-beta1",
+    "grunt-umd": "^2.3.0",
     "jit-grunt": "^0.7.0",
     "jshint-stylish": "^0.2.0",
     "load-grunt-config": "^0.10.0",
